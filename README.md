@@ -46,13 +46,13 @@ text, and returns one grounded answer — with sources.
 omnibrain/
 ├── ingestion/       # PDF parsing, chunking, embedding (Vineet)
 │   └── __init__.py
-├── agents/           # Search Agent, SQL Agent, Vision Agent (Pranali, Sanskriti)
+├── agents/           # Search Agent, SQL Agent, Vision Agent (Sanskriti)
 │   └── __init__.py
-├── orchestrator/     # LangGraph supervisor, state, routing (Pranali, Sanskriti)
+├── orchestrator/     # LangGraph supervisor, state, routing (Sanskriti)
 │   └── __init__.py
-├── eval/             # Langfuse tracing, guardrails, test query set (Sanskriti)
+├── eval/             # Langfuse tracing, guardrails, test query set (Pranali)
 │   └── __init__.py
-├── app/               # Streamlit demo UI (Sanskriti)
+├── app/               # Streamlit demo UI (Pranali)
 │   └── __init__.py
 ├── data/
 │   ├── raw/           # source PDFs (not committed)
