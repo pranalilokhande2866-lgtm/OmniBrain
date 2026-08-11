@@ -1,0 +1,36 @@
+# --- Core orchestration ---
+langchain>=0.3.0
+langgraph>=0.2.0
+langchain-openai>=0.2.0        # swap/remove if going fully open-source
+langchain-community>=0.3.0
+
+# --- Vector store & embeddings ---
+qdrant-client>=1.11.0
+sentence-transformers>=3.0.0   # for text embeddings if not using OpenAI embeddings
+open-clip-torch>=2.24.0        # CLIP embeddings for images/charts
+
+# --- PDF / document parsing ---
+unstructured[pdf]>=0.15.0
+pymupdf>=1.24.0                # fitz - fast PDF text/image extraction
+camelot-py[cv]>=0.11.0         # table extraction
+pdf2image>=1.17.0
+
+# --- SQL agent / stock data ---
+sqlalchemy>=2.0.0
+yfinance>=0.2.40
+
+# --- Vision-Language Model (pick based on budget decision) ---
+# openai>=1.40.0                # for GPT-4o vision calls
+# transformers>=4.44.0          # for local LLaVA
+# accelerate>=0.33.0
+
+# --- Evaluation & guardrails ---
+langfuse>=3.0.0
+# nemoguardrails>=0.10.0        # optional, can start with custom checks instead
+
+# --- App / demo ---
+streamlit>=1.38.0
+
+# --- Utilities ---
+python-dotenv>=1.0.0
+pydantic>=2.8.0
