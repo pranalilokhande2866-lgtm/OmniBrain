@@ -1,0 +1,25 @@
+# Environment
+.env
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Data generated at runtime - don't ship this, it's regenerated on first run
+data/uploads/*
+!data/uploads/.gitkeep
+data/qdrant_storage/
+data/stock_data.db
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Streamlit
+.streamlit/secrets.toml
+
+# pytest
+.pytest_cache/

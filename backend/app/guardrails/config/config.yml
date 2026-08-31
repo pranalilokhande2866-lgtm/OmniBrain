@@ -1,0 +1,34 @@
+# NeMo Guardrails configuration.
+#
+# Verified against nemoguardrails==0.23.0's actual shipped example
+# (examples/bots/abc/ inside the installed package) rather than
+# written from memory - the `self check input` / `self check output`
+# rail names and the prompts.yml task-based prompt structure below
+# are taken directly from that package's own working example, not
+# guessed at.
+#
+# What this does: every user query is checked by `self check input`
+# BEFORE it reaches the LangGraph pipeline (see guardrails_client.py).
+# The check prompt (prompts.yml) asks the LLM whether the question is
+# answerable from an ingested financial report, or whether it strays
+# outside that scope - general chit-chat, unrelated topics, or
+# attempts to make the bot ignore its instructions. Out-of-scope
+# questions get refused here, before a single retrieval/generation
+# call runs downstream - this is the brief's Week 3 requirement to
+# "strictly block the AI from answering questions outside the scope
+# of the provided documents."
+
+models:
+  - type: main
+    engine: openai
+    model: gpt-4o-mini   # a cheap/fast model is enough for a yes/no scope check
+
+rails:
+  input:
+    flows:
+      - self check input
+  output:
+    flows:
+      - self check output
+
+streaming: False

@@ -1,0 +1,41 @@
+# --- Core web/API ---
+fastapi>=0.115
+uvicorn[standard]>=0.34
+python-multipart>=0.0.20
+pydantic-settings>=2.6
+python-dotenv>=1.0
+
+# --- PDF ingestion ---
+pdfplumber>=0.11
+pymupdf>=1.24
+pypdf>=5.0
+
+# --- Embeddings (local, no API key needed) ---
+sentence-transformers>=3.0
+torch>=2.2              # required by sentence-transformers (CPU build is fine)
+pillow>=10.0             # image decoding for the CLIP image embedder
+
+# --- Vector store ---
+qdrant-client>=1.10
+
+# --- Agentic orchestration ---
+langgraph>=0.2
+langchain-core>=0.3
+langchain-openai>=0.2
+langchain-google-genai>=2.0    # free-tier Gemini option - see .env.example
+langchain>=0.3          # needed only for the Langfuse <-> LangChain callback bridge
+openai>=1.50
+
+# --- Guardrails ---
+nemoguardrails>=0.11
+
+# --- Observability ---
+langfuse>=4.0            # v2/v3 had a different API (langfuse.callback vs langfuse.langchain) - must be 4.x+
+
+# --- Frontend ---
+streamlit>=1.38
+requests>=2.32
+
+# --- Dev / testing ---
+pytest>=8.0
+httpx>=0.27               # required by FastAPI's TestClient
