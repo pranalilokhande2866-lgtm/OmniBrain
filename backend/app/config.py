@@ -9,13 +9,6 @@ from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-# Anchored to this file's location, NOT the process's current working
-# directory. run_dev.sh launches uvicorn from backend/ and Streamlit
-# from frontend/ - if .env/data_dir were plain relative paths ("./.env",
-# "./data"), they'd resolve differently (and wrongly) depending on which
-# of those you happened to launch from. This file is always at
-# <project_root>/backend/app/config.py, so walking up three parents
-# always lands on <project_root> no matter where the process was started.
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
@@ -26,17 +19,15 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    # --- OpenAI (optional if GOOGLE_API_KEY is set instead - see below) ---
+    # --- OpenAI (optional if GOOGLE_API_KEY is set instead) ---
     openai_api_key: str = ""
     openai_chat_model: str = "gpt-4o"
     openai_vision_model: str = "gpt-4o"
 
-    # --- Google Gemini (free tier via https://aistudio.google.com/apikey -
-    # no billing/credit card required. Used automatically instead of OpenAI
-    # when set - see agents/llm.py) ---
+    # --- Google Gemini (free tier via https://aistudio.google.com/apikey) ---
     google_api_key: str = ""
-    google_chat_model: str = "gemini-flash-latest"
-    google_vision_model: str = "gemini-flash-latest"  # same model handles both; it's natively multimodal
+    google_chat_model: str = "gemini-flash-lite-latest"
+    google_vision_model: str = "gemini-flash-lite-latest"
 
     # --- Qdrant ---
     qdrant_url: str = ""
@@ -65,7 +56,6 @@ class Settings(BaseSettings):
 
     @property
     def qdrant_storage_path(self) -> Path:
-        """Used only when qdrant_url is empty (local/embedded mode)."""
         p = self.data_path / "qdrant_storage"
         p.mkdir(parents=True, exist_ok=True)
         return p
@@ -81,6 +71,10 @@ class Settings(BaseSettings):
     @property
     def has_google_key(self) -> bool:
         return bool(self.google_api_key.strip())
+
+    @property
+    def has_any_llm_key(self) -> bool:
+        return self.has_google_key or self.has_openai_key
 
     @property
     def llm_provider(self) -> str | None:
