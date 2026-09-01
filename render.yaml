@@ -1,0 +1,45 @@
+# Render Blueprint - deploys OmniBrain as two services.
+# https://render.com/docs/blueprint-spec
+#
+# NOTE ON FREE TIER: the backend loads torch + sentence-transformers +
+# langchain + langgraph + nemoguardrails together, which commonly
+# exceeds the free tier's 512MB RAM limit (Render's own docs: free
+# tier is "fine for light workloads, not AI inference"). If the
+# backend crashes/won't start after deploying, bump its `plan` below
+# from `free` to `starter` in the Render dashboard - that's the fix,
+# not more debugging.
+#
+# Both free services also spin down after 15 min idle and take
+# 30-60s to cold-start on the next request - expected, not a bug.
+#
+# Storage note: Qdrant (local mode) and the SQLite stock DB write to
+# disk under data/ - on the free tier this is NOT persistent across
+# redeploys/restarts, so you'll need to re-ingest your PDF after those
+# events. Add a Render Disk (paid) if you need it to persist.
+
+services:
+  - type: web
+    name: omnibrain-backend
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: SELF_RAG_MAX_RETRIES
+        value: "2"
+
+  - type: web
+    name: omnibrain-frontend
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: cd frontend && streamlit run streamlit_app.py --server.port $PORT --server.address 0.0.0.0 --server.headless true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: BACKEND_URL
+        sync: false
